@@ -5,6 +5,7 @@ services:
     container_name: "test_db"
     platform: linux/x86_64
     build:
+    # context: . means that docker file should be existing in the current directory(in the same folder of the docker-compose.yml file)
       context: .
       dockerfile: db.Dockerfile
     networks:
@@ -23,6 +24,7 @@ services:
       # MYSQL_ROOT_PASSWORD: ${DATABASE_PASSWORD}
       # MYSQL_DATABASE: ${DATABASE_NAME}
 
+    # binding mysql_data to mysql library
     # we mount a data volume to make sure we don't lose data
     volumes:
       - mysql_data:/var/lib/mysql
@@ -40,10 +42,13 @@ services:
       - db
     # We mount the working dir into the container, handy for development
     # This is what makes the hot reloading work inside of a Docker container
+    # Binding working directory to the app directory
     volumes:
       - .:/app/
 
+# For network we use default network 
 networks:
   default:
+# For volumes we use mysql_data from line 29
 volumes:
   mysql_data:
